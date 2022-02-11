@@ -5,12 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="javascript" src="backend.js"></script>
+    <link rel="stylesheet" href="style.css">
     <title>Home</title>
 </head>
 
 <body>
-    <h1>Home</h1>
-    
+    <div class="topnav">
+        <a class="active" href="#home">Home</a>
+        <a href="#contact">Find a Bathroom</a>
+        <a href="#about">Rate</a>
+        <input type="text" placeholder="Search..">
+    </div>
+
+    <div>
+        <h1>Recently Added Reviews</h1>
+        <p>
+            Location: Hayden Library <br>
+            Type: Gender Neutral <br>
+            Rated: 3 / 5 stars <br>
+            This bathroom is usually very very clean, rated lower just because there was no toilet paper left!
+        </p>
+        <p>
+            Location: Memorial Union 2nd Floor <br>
+            Type: Women's <br>
+            Rated: 1 / 5 stars <br>
+            This bathroom stinks! Cleaners, where are you?!
+        </p>
+        <p>
+            Location: Business Administration 2nd floor <br>
+            Type: Men's <br>
+            Rated: 4 / 5 stars <br>
+            Surprisingly clean for a men's bathroom! Floors were cleaned, stalls well maintained :)
+        </p>
+        <button onclick="addABathroom()">Add a Review</button>
+    </div>
 
 </body>
 </html>

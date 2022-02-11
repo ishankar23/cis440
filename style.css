@@ -1,0 +1,46 @@
+/* Add a black background color to the top navigation bar */
+.topnav {
+    overflow: hidden;
+    background-color: maroon;
+  }
+  
+  /* Navigation bar buttons */
+  .topnav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: gold;
+    color: black;
+  }
+  
+  /* Highlight the current page */
+  .topnav a.active {
+    background-color: gold;
+    color: white;
+  }
+  
+  /* Search box */
+  .topnav input[type=text] {
+    float: right;
+    padding: 6px;
+    border: none;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+  }
+
+  p {
+      border: 3px;
+      border-style: solid;
+      border-color: maroon;
+      padding: 5px 5px;
+  }
+  

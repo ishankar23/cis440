@@ -4,17 +4,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="javascript" src="backend.js"></script>
+    <!-- <script type="text/javascript" src="backend.js"></script> -->
     <title>Rate My Bathroom</title>
+    <script>
+        let username = "john"; 
+        let password = "doe"; 
+        function validateUser(username, password) {
+            // const user = {un: username, pw: password}; 
+            console.log(username); 
+            console.log(password);
+        }
+        
+    </script>
 </head>
 
 <body>
     <h1>Rate My Bathroom</h1>
     <h2>Login</h2>
-    <form action="#" method="post" onsubmit="validateUser()">
-        <input type="text">
-        <input type="text">
+    <form action="home.html" onsubmit="validateUser(document.getElementById('username').value, document.getElementById('password').value)">
+        <input id="username" type="text" placeholder="Username"><br>
+        <input id="password" type="password" placeholder="Password"><br>
         <input type="submit">
     </form>
+
 </body>
 </html>
