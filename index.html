@@ -8,6 +8,18 @@
     <!-- <script type="javascript" src="backend.js"></script> -->
     <title>Rate My Bathroom</title>
     <script>
+        var mysql = require('mysql');
+
+        var con = mysql.createConnection({
+            host: "34.125.52.101",
+            user: "cis-440-app",
+            password: "codingisfun"
+            });
+
+        con.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected!");
+        });
         let username = "john"; 
         let password = "doe"; 
         function validateUser(username, password) {
