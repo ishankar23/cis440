@@ -37,10 +37,10 @@
     font-size: 17px;
   }
 
-  p {
+  .bathroom-profile {
       border: 3px;
       border-style: solid;
       border-color: maroon;
-      padding: 5px 5px;
+      margin: 5px 5px;
   }
   

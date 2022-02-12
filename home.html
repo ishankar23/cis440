@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <script type="javascript" src="backend.js"></script>
-    <link rel="stylesheet" href="style.css">
     <title>Home</title>
 </head>
 
@@ -20,24 +19,34 @@
 
     <div>
         <h1>Recently Added Reviews</h1>
-        <p>
-            Location: Hayden Library <br>
-            Type: Gender Neutral <br>
-            Rated: 3 / 5 stars <br>
-            This bathroom is usually very very clean, rated lower just because there was no toilet paper left!
-        </p>
-        <p>
-            Location: Memorial Union 2nd Floor <br>
-            Type: Women's <br>
-            Rated: 1 / 5 stars <br>
-            This bathroom stinks! Cleaners, where are you?!
-        </p>
-        <p>
-            Location: Business Administration 2nd floor <br>
-            Type: Men's <br>
-            Rated: 4 / 5 stars <br>
-            Surprisingly clean for a men's bathroom! Floors were cleaned, stalls well maintained :)
-        </p>
+
+        <div class="bathroom-profile">
+            <p>
+                Location: Hayden Library <br>
+                Type: Gender Neutral <br>
+                Rated: 3 / 5 stars <br>
+                This bathroom is usually very very clean, rated lower just because there was no toilet paper left!
+            </p>
+        </div>
+
+        <div class="bathroom-profile">
+            <p>
+                Location: <a href="./MU2.html">Memorial Union 2nd Floor</a> <br>
+                Type: Women's <br>
+                Rated: 1 / 5 stars <br>
+                This bathroom stinks! Cleaners, where are you?!
+            </p>
+        </div>
+
+        <div class="bathroom-profile">
+            <p>
+                Location: Business Administration 2nd floor <br>
+                Type: Men's <br>
+                Rated: 4 / 5 stars <br>
+                Surprisingly clean for a men's bathroom! Floors were cleaned, stalls well maintained :)
+            </p>
+        </div>
+        
         <button onclick="addABathroom()">Add a Review</button>
     </div>
 
