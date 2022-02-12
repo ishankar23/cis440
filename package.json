@@ -1,5 +1,23 @@
 {
   "dependencies": {
     "mysql": "^2.18.1"
-  }
+  },
+  "name": "cis-440-capstone-files",
+  "version": "1.0.0",
+  "main": "backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ishankar23/cis440.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ishankar23/cis440/issues"
+  },
+  "homepage": "https://github.com/ishankar23/cis440#readme",
+  "description": ""
 }
