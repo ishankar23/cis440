@@ -64,11 +64,15 @@
                     // Loading the review list div from the dom into the JS
                     var reviewListDiv = document.getElementById("reviewList");
                     
-                    // Constructing new paragraph element
-                    let pgrph = document.createElement("p");
+                    // Constructing new div element
+                    let pgrph = document.createElement("div");
+                    pgrph.setAttribute("id", "review");
                     // Location line
                     // doc.data().location is the location field for the data in Firebase
-                    let locationText = document.createTextNode("Location : " + doc.data().location);
+                    var locationText = document.createElement("a");
+                    locationText.setAttribute("href", "./location.html");
+                    locationText.setAttribute("id", "location");
+                    locationText.innerText =doc.data().location;
                     pgrph.appendChild(locationText);
                     // Adding paragraph break
                     var br = document.createElement('br');
