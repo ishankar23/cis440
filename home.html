@@ -77,9 +77,9 @@
                     // Location line
                     // doc.data().location is the location field for the data in Firebase
                     var locationText = document.createElement("a");
-                    locationText.setAttribute("href", "./location.html");
+                    locationText.setAttribute("href", doc.data().locationLink);
                     locationText.setAttribute("id", "location");
-                    locationText.innerText =doc.data().location;
+                    locationText.innerText = doc.data().location;
                     pgrph.appendChild(locationText);
                     // Adding paragraph break
                     var br = document.createElement('br');
