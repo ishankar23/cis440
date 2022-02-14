@@ -30,7 +30,7 @@
 
         // --- Sample Code for Database Usage ---
 
-        // Sample code for writing into the Firebase Database
+        // 
         /* db.collection("reviews").add({
             location: "Hayden",
             type: "Gender",
@@ -52,6 +52,21 @@
         }); */
 
         // --- End of Sample Code ---
+
+        //add location link column to the database
+        // db.collection("reviews").add({
+        //     location: "Hayden",
+        //     type: "Gender",
+        //     rating: 5,
+        //     comment: "Please Help",
+        //     locationLink: "./hayden.html"
+        // })
+        // .then((docRef) => {
+        //     console.log("Document written with ID: ", docRef.id);
+        // })
+        // .catch((error) => {
+        //     console.error("Error adding document: ", error);
+        // }); 
 
         // Read out of the reviews collection (basically a table in Firebase) to the homepage for the app
         function readReviewsToList() {
