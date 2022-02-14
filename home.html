@@ -53,20 +53,12 @@
 
         // --- End of Sample Code ---
 
-        //add location link column to the database
-        // db.collection("reviews").add({
-        //     location: "Hayden",
-        //     type: "Gender",
-        //     rating: 5,
-        //     comment: "Please Help",
-        //     locationLink: "./hayden.html"
-        // })
-        // .then((docRef) => {
-        //     console.log("Document written with ID: ", docRef.id);
-        // })
-        // .catch((error) => {
-        //     console.error("Error adding document: ", error);
-        // }); 
+        // To get Aira started on bathroom locations
+        db.collection("bathrooms").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                console.log(doc.data());
+            });
+        });
 
         // Read out of the reviews collection (basically a table in Firebase) to the homepage for the app
         function readReviewsToList() {
