@@ -27,9 +27,11 @@
       
         // Initialize Database
         var db = firebase.firestore();
-        console.log("REGISTERED DB IN JS");
-        // Add a second document with a generated ID.
-        db.collection("reviews").add({
+
+        // --- Sample Code for Database Usage ---
+
+        // Sample code for writing into the Firebase Database
+        /* db.collection("reviews").add({
             location: "Hayden",
             type: "Gender",
             rating: 5,
@@ -40,13 +42,101 @@
         })
         .catch((error) => {
             console.error("Error adding document: ", error);
-        });
-        console.log("ADDED DB RECORD IN FIREBASE")
-        db.collection("reviews").get().then((querySnapshot) => {
+        }); */
+
+        // Sample code for reading the Firebase Database
+        /* db.collection("reviews").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 console.log(`${doc.id} => ${doc.data()}`);
             });
-        });
+        }); */
+
+        // --- End of Sample Code ---
+
+        // Read out of the reviews collection (basically a table in Firebase) to the homepage for the app
+        function readReviewsToList() {
+            // Clear the review list
+            var reviewListDiv = document.getElementById("reviewList");
+            reviewListDiv.innerHTML = "<h1>Recently Added Reviews</h1>";
+            // Add each review
+            db.collection("reviews").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    // Loading the review list div from the dom into the JS
+                    var reviewListDiv = document.getElementById("reviewList");
+                    
+                    // Constructing new paragraph element
+                    let pgrph = document.createElement("p");
+                    // Location line
+                    // doc.data().location is the location field for the data in Firebase
+                    let locationText = document.createTextNode("Location : " + doc.data().location);
+                    pgrph.appendChild(locationText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    // Type line
+                    // doc.data().type is the type field for the data in Firebase
+                    let typeText = document.createTextNode("Type : " + doc.data().type);
+                    pgrph.appendChild(typeText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    // Rated line
+                    // doc.data().rated is the rating field for the data in Firebase
+                    let ratedText = document.createTextNode("Rated : " + doc.data().rating + " / 5 ⭐s");
+                    pgrph.appendChild(ratedText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    // Comment line
+                    // doc.data().comment is the comment field for the data in Firebase
+                    let commentText = document.createTextNode(doc.data().comment);
+                    pgrph.appendChild(commentText);
+
+                    // Add the newly constructed paragraph to the review list div
+                    reviewListDiv.appendChild(pgrph);
+
+                    // console.log(doc.data());
+                });
+            });
+        }
+        window.onload = readReviewsToList;
+
+        // Write to database for adding reviews
+        function addAReview(reviewLocation, reviewType, reviewRating, reviewComment) {
+            db.collection("reviews").add({
+                location: reviewLocation,
+                type: reviewType,
+                rating: reviewRating,
+                comment: reviewComment
+            })
+            .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+                document.getElementById('location').value = null;
+                document.getElementById('type').value = null;
+                document.getElementById('rating').value = null;
+                document.getElementById('comment').value = null;
+                readReviewsToList();
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+                let errorMsgDisplay = document.getElementById("errorMsg");
+                let errorMsgText = document.createTextNode("Error Adding Review. See Console for More Details.");
+                errorMsgDisplay.appendChild(errorMsgText);
+            });
+        }
+
+        function previewReview(reviewLocation, reviewType, reviewRating, reviewComment) {
+            console.log("--- Inputted Review ---");
+            console.log("Location: " + reviewLocation);
+            console.log("Type: " + reviewType);
+            console.log("Rating: " + reviewRating);
+            console.log("Comment: " + reviewComment);
+            console.log("--- End of Review ---");
+            document.getElementById('location').value = null;
+            document.getElementById('type').value = null;
+            document.getElementById('rating').value = null;
+            document.getElementById('comment').value = null;
+        }
       </script>
     <!-- END OF DATABASE CONNECTION -->
 </head>
@@ -59,27 +149,38 @@
         <input type="text" placeholder="Search..">
     </div>
 
-    <div>
+    <div id="reviewList">
         <h1>Recently Added Reviews</h1>
-        <p>
-            Location: Hayden Library <br>
-            Type: Gender Neutral <br>
-            Rated: 3 / 5 stars <br>
-            This bathroom is usually very very clean, rated lower just because there was no toilet paper left!
-        </p>
-        <p>
-            Location: Memorial Union 2nd Floor <br>
-            Type: Women's <br>
-            Rated: 1 / 5 stars <br>
-            This bathroom stinks! Cleaners, where are you?!
-        </p>
-        <p>
-            Location: Business Administration 2nd floor <br>
-            Type: Men's <br>
-            Rated: 4 / 5 stars <br>
-            Surprisingly clean for a men's bathroom! Floors were cleaned, stalls well maintained :)
-        </p>
-        <button onclick="addABathroom()">Add a Review</button>
+        <!-- Content in the review list is added in by the js above -->
+    </div>
+    <hr>
+    <p id="errorMsg" hidden></p>
+    <div>
+        <div>
+            <label for="location">Location<span>*</span></label><br>
+            <input type="text" placeholder="Hayden 2nd Floor West"  name="location"  id="location" title="Where is the bathroom you're reviewing? Don't forget to include the floor of the building!" required="required">
+        </div><br>
+        <div>
+            <label for="type">Bathroom Type<span>*</span></label><br>
+            <div>
+                <select name="type" id="type">
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Gender Neutral">Gender Neutral</option>
+                </select>
+            </div>
+        </div><br>
+        <div>
+            <label for="rating">Rating<span>*</span></label><br>
+            <input type="number" placeholder="0" name="rating"  min="0" max="5" step="1" id="rating" title="How would YOU rate this bathroom?? Change lives by rating accurately!!" required="required">  / 5 ⭐s
+        </div><br>
+        <div>
+            <label for="comment">Comments?</span></label><br>
+            <textarea type="textarea" name="comment" rows="4" id="comment" title="Have something else to say?? Leave your thoughts here :) "></textarea>
+        </div><br>
+        <div>
+            <button type="button" name="addReviewButton" id="addReviewButton" onclick="addAReview(document.getElementById('location').value, document.getElementById('type').value, document.getElementById('rating').value, document.getElementById('comment').value)">Add Review</button>
+        </div>
     </div>
 
 </body>
