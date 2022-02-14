@@ -53,6 +53,13 @@
 
         // --- End of Sample Code ---
 
+        // To get Aira started on bathroom locations
+        db.collection("bathrooms").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                console.log(doc.data());
+            });
+        });
+
         // Read out of the reviews collection (basically a table in Firebase) to the homepage for the app
         function readReviewsToList() {
             // Clear the review list
