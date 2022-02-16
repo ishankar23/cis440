@@ -61,9 +61,9 @@
         function queryReviewsToList() {
             // Clear the review list
             var reviewListDiv = document.getElementById("reviewList");
-            reviewListDiv.innerHTML = "<h1>Recently Added Reviews</h1>";
+            reviewListDiv.innerHTML = "<h1>Hayden Library</h1>";
             // Add each review
-            db.collection("reviews").where("location", "in", ["Memorial Union 2nd Floor"]).get().then((querySnapshot)=> {
+            db.collection("reviews").where("location", "in", ["Hayden Library", "Hayden", "hayden", "hayden Library"]).get().then((querySnapshot)=> {
                 querySnapshot.forEach((doc)=> {
                     var reviewListDiv = document.getElementById("reviewList");
                     
@@ -102,7 +102,7 @@
                     // Add the newly constructed paragraph to the review list div
                     reviewListDiv.appendChild(pgrph);
 
-                    console.log(doc.data());
+                    // console.log(doc.data());
                 });
             })
             .catch((error) => {
@@ -121,8 +121,8 @@
         <input type="text" placeholder="Search..">
     </div>
     <div id="reviewList">
-        <h1>Memorial Union 2nd Floor</h1>
-        <h1>Recently Added Reviews</h1>
+        <h1>Hayden Library</h1>
+        <h2>Recently Added Reviews</h2>
         <!-- Content in the review list is added in by the js above -->
     </div>
 </body>

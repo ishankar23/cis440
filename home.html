@@ -74,6 +74,7 @@
                     // Constructing new div element
                     let pgrph = document.createElement("div");
                     pgrph.setAttribute("id", "review");
+
                     // Location line
                     // doc.data().location is the location field for the data in Firebase
                     var locationText = document.createElement("a");
@@ -84,6 +85,15 @@
                     // Adding paragraph break
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
+
+                    // Level line
+                    // doc.data().level is the type field for the data in Firebase
+                    let levelText = document.createTextNode("Level : " + doc.data().level);
+                    pgrph.appendChild(levelText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+
                     // Type line
                     // doc.data().type is the type field for the data in Firebase
                     let typeText = document.createTextNode("Type : " + doc.data().type);
@@ -91,6 +101,7 @@
                     // Adding paragraph break
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
+
                     // Rated line
                     // doc.data().rated is the rating field for the data in Firebase
                     let ratedText = document.createTextNode("Rated : " + doc.data().rating + " / 5 ⭐s");
@@ -98,6 +109,7 @@
                     // Adding paragraph break
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
+
                     // Comment line
                     // doc.data().comment is the comment field for the data in Firebase
                     let commentText = document.createTextNode(doc.data().comment);
@@ -113,16 +125,19 @@
         window.onload = readReviewsToList;
 
         // Write to database for adding reviews
-        function addAReview(reviewLocation, reviewType, reviewRating, reviewComment) {
+        function addAReview(reviewLocation, reviewLevel, reviewType, reviewRating, reviewComment, profileLink) {
             db.collection("reviews").add({
                 location: reviewLocation,
+                level: reviewLevel,
                 type: reviewType,
                 rating: reviewRating,
-                comment: reviewComment
+                comment: reviewComment,
+                locationLink: reviewLocation + ".html"
             })
             .then((docRef) => {
                 console.log("Document written with ID: ", docRef.id);
                 document.getElementById('location').value = null;
+                document.getElementById('level').value = null;
                 document.getElementById('type').value = null;
                 document.getElementById('rating').value = null;
                 document.getElementById('comment').value = null;
@@ -139,6 +154,7 @@
         function previewReview(reviewLocation, reviewType, reviewRating, reviewComment) {
             console.log("--- Inputted Review ---");
             console.log("Location: " + reviewLocation);
+            console.log("Level " + reviewLevel);
             console.log("Type: " + reviewType);
             console.log("Rating: " + reviewRating);
             console.log("Comment: " + reviewComment);
@@ -169,8 +185,19 @@
     <div>
         <div>
             <label for="location">Location<span>*</span></label><br>
-            <input type="text" placeholder="Hayden 2nd Floor West"  name="location"  id="location" title="Where is the bathroom you're reviewing? Don't forget to include the floor of the building!" required="required">
+            <div>
+                <select name="location" id="location">
+                    <option value="Memorial Union">Memorial Union</option>
+                    <option value="Hayden Library">Hayden Library</option>
+                    <option value="Business Administration C-Wing">Business Administration C-Wing (BAC)</option>
+                    <option value="Business Administration">Business Administration (BA)</option>
+                    <option value="Barrett Honors Hall">Barrett Honors Hall</option>
+                </select>
+            </div>
         </div><br>
+        <div>
+            <label for="level">Level<span>*</span></label><br>
+            <input type="number" placeholder="1" name="level" min="0" max="6" step="1" id="level" required="required">
         <div>
             <label for="type">Bathroom Type<span>*</span></label><br>
             <div>
@@ -190,9 +217,10 @@
             <textarea type="textarea" name="comment" rows="4" id="comment" title="Have something else to say?? Leave your thoughts here :) "></textarea>
         </div><br>
         <div>
-            <button type="button" name="addReviewButton" id="addReviewButton" onclick="addAReview(document.getElementById('location').value, document.getElementById('type').value, document.getElementById('rating').value, document.getElementById('comment').value)">Add Review</button>
+            <button type="button" name="addReviewButton" id="addReviewButton" onclick="addAReview(document.getElementById('location').value, document.getElementById('level').value, document.getElementById('type').value, document.getElementById('rating').value, document.getElementById('comment').value, document.getElementById(location))">Add Review</button>
         </div>
     </div>
 
 </body>
 </html>
+
