@@ -82,6 +82,14 @@
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
 
+                    // Level line
+                    // doc.data().type is the type field for the data in Firebase
+                    let levelText = document.createTextNode("Level : " + doc.data().level);
+                    pgrph.appendChild(levelText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+
                     // Type line
                     // doc.data().type is the type field for the data in Firebase
                     let typeText = document.createTextNode("Type : " + doc.data().type);
@@ -121,7 +129,7 @@
     <div class="topnav">
         <a href="./home.html">Home</a>
         <a class="active" href="#contact">Find a Bathroom</a>
-        <a href="#about">Rate</a>
+        <a href="./rate.html">Rate</a>
         <input type="text" placeholder="Search..">
     </div>
     <div id="reviewList">
