@@ -124,15 +124,14 @@
                     pgrph.appendChild(br);
                     // doc.data().reviewDownVote is the downvote field for the data in Firebase
                     // doc.data().reviewUpVote is the Upvote field for the data in Firebase
-
-                    // Adding paragraph break
+                    //upvote counter
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
-
-                    //upvote counter
-                    var upvote = document.createElement('p');
-                    upvote.innerHTML = 'Up: ' + doc.data().reviewUpVote ;
-                    upvote.onclick = function () {
+                    var upvote = document.createElement('b');
+                    upvote.innerHTML = 'Click --> UpVote: ' + doc.data().reviewUpVote;
+                    upvote.onclick = function ()
+                    {
+                        //print doc id to console to obtain
                         console.log('hellooo: ' + doc.id)
                         const thisReview = db.collection('reviews').doc(doc.id);
                         let newUpVoteCount = doc.data().reviewUpVote + 1
@@ -144,9 +143,12 @@
                     pgrph.appendChild(upvote);
 
                     //downvote counter
-                    var downvote = document.createElement('p');
-                    downvote.innerHTML = 'Down: ' + doc.data().reviewDownVote ;
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    var downvote = document.createElement('b');
+                    downvote.innerHTML = 'Click --> DownVote: ' + doc.data().reviewDownVote ;
                     downvote.onclick = function () {
+                        //print doc id to console to obtain
                         console.log('hellooo: ' + doc.id)
                         const thisReview = db.collection('reviews').doc(doc.id);
                         let newDownVoteCount = doc.data().reviewDownVote + 1
@@ -277,8 +279,6 @@
         <div>
             <button type="button" name="addReviewButton" id="addReviewButton" onclick="addAReview(document.getElementById('location').value, document.getElementById('level').value, document.getElementById('type').value, document.getElementById('rating').value, document.getElementById('comment').value, document.getElementById(location))">Add Review</button>
         </div>
-    </div>
-
 </body>
 </html>
 
