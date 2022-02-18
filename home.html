@@ -58,6 +58,19 @@
             // Clear the review list
             var reviewListDiv = document.getElementById("reviewList");
             reviewListDiv.innerHTML = "<h2>Recently Added Reviews</h2>";
+            // Check for admin role
+            // Pull the UID out of the URL
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const uid = urlParams.get('uid');
+            let currentUserPrivAdmin = false;
+            console.log("CHECKING USER PERMS");
+            db.collection("users").doc(uid).get().then(function (doc) {
+                    console.log(doc.get("role"));
+                    if (doc.get("role") == "admin") {
+                        currentUserPrivAdmin = true;
+                    }
+            });
             // Add each review
             db.collection("reviews").get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
@@ -112,15 +125,16 @@
                     let commentText = document.createTextNode(doc.data().comment);
                     pgrph.appendChild(commentText);
 
-
-                    var deleteButton = document.createElement('button');
-                    // var editButton = document.createElement('button');
-                    deleteButton.innerHTML = 'x'
-                    // editButton.innerHTML = '✎'
-                    
-                    reviewListDiv.appendChild(deleteButton);
-                    deleteButton.setAttribute('onclick', 'deleteReviews("' + doc.id + '")');
-                    // reviewListDiv.appendChild(editButton);
+                    if(currentUserPrivAdmin){
+                        var deleteButton = document.createElement('button');
+                        // var editButton = document.createElement('button');
+                        deleteButton.innerHTML = 'x'
+                        // editButton.innerHTML = '✎'
+                        
+                        reviewListDiv.appendChild(deleteButton);
+                        deleteButton.setAttribute('onclick', 'deleteReviews("' + doc.id + '")');
+                        // reviewListDiv.appendChild(editButton);
+                    }
 
                     //Up/Down Vote Line
                     // Adding paragraph break
@@ -133,8 +147,7 @@
                     pgrph.appendChild(br);
                     var upvote = document.createElement('b');
                     upvote.innerHTML = 'Click --> UpVote: ' + doc.data().reviewUpVote;
-                    upvote.onclick = function ()
-                    {
+                    upvote.onclick = function (){
                         //print doc id to console to obtain
                         console.log('hellooo: ' + doc.id)
                         const thisReview = db.collection('reviews').doc(doc.id);
@@ -157,9 +170,9 @@
                         const thisReview = db.collection('reviews').doc(doc.id);
                         let newDownVoteCount = doc.data().reviewDownVote + 1
                         thisReview.update({reviewDownVote: newDownVoteCount}).then(res => {
-                        console.log(res);
-                        readReviewsToList()
-                        })
+                            console.log(res);
+                            readReviewsToList()
+                        });
                     };
                     pgrph.appendChild(downvote);
 
@@ -170,7 +183,7 @@
                     // console.log(doc.data());
                 });
             });
-        }
+        };
         window.onload = readReviewsToList;
 
         // Write to database for adding reviews

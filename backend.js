@@ -62,10 +62,10 @@
                 curr_user = true; 
             
             {
-                console.log(`${doc.id} => ${doc.data()}`);
+                console.log(doc.id);
                 if (doc.get("username") == user && doc.get("password") == pass && user != null && pass != null) 
                 {
-                    window.location.replace("home.html");
+                    window.location.replace("home.html?uid=" + doc.id);
                 }
                  
                 
