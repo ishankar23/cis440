@@ -13,15 +13,13 @@
 
 <body>
     <h1>Rate My Bathroom</h1>
-    <h2>Login</h2>
-    <h4>Passwords must be greater than or equal to 4 characters in length.</h4>
-    <form onclick="readLogin(document.getElementById('username').value, document.getElementById('password').value)" id="loginForm" name="loginForm" action="loginError.html">
+    <h2>Create An Account</h2>
+    <form onclick="writeUserData(document.getElementById('username').value, document.getElementById('password').value)">
         <input id="username" type="text" placeholder="Username"><br>
         <input id="password" type="password" placeholder="Password"><br>
-        <button type="button" name="submitBtn" id="submitBtn">Submit</button>
+        <button type="button">Create Account</button>
     </form>
-    
+    <h3>Already have an account?</h3>
+    <a href="index.html">Login to Existing Account</a>
 </body>
 </html>
-
-<!-- action="home.html" -->
