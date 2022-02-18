@@ -68,6 +68,9 @@
             // Add each review
             db.collection("reviews").get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
+                    console.log('a doc: ', doc.data());
+                    console.log('a doc: ', doc.id);
+                    // console.log('a doc: ', doc.get());
                     // Loading the review list div from the dom into the JS
                     var reviewListDiv = document.getElementById("reviewList");
                     
@@ -115,6 +118,45 @@
                     let commentText = document.createTextNode(doc.data().comment);
                     pgrph.appendChild(commentText);
 
+                    //Up/Down Vote Line
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    // doc.data().reviewDownVote is the downvote field for the data in Firebase
+                    // doc.data().reviewUpVote is the Upvote field for the data in Firebase
+
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+
+                    //upvote counter
+                    var upvote = document.createElement('p');
+                    upvote.innerHTML = 'Up: ' + doc.data().reviewUpVote ;
+                    upvote.onclick = function () {
+                        console.log('hellooo: ' + doc.id)
+                        const thisReview = db.collection('reviews').doc(doc.id);
+                        let newUpVoteCount = doc.data().reviewUpVote + 1
+                        thisReview.update({reviewUpVote: newUpVoteCount}).then(res => {
+                        console.log(res);
+                        readReviewsToList()
+                        })
+                    };
+                    pgrph.appendChild(upvote);
+
+                    //downvote counter
+                    var downvote = document.createElement('p');
+                    downvote.innerHTML = 'Down: ' + doc.data().reviewDownVote ;
+                    downvote.onclick = function () {
+                        console.log('hellooo: ' + doc.id)
+                        const thisReview = db.collection('reviews').doc(doc.id);
+                        let newDownVoteCount = doc.data().reviewDownVote + 1
+                        thisReview.update({reviewDownVote: newDownVoteCount}).then(res => {
+                        console.log(res);
+                        readReviewsToList()
+                        })
+                    };
+                    pgrph.appendChild(downvote);
+
                     // Add the newly constructed paragraph to the review list div
                     reviewListDiv.appendChild(pgrph);
 
@@ -132,7 +174,9 @@
                 type: reviewType,
                 rating: reviewRating,
                 comment: reviewComment,
-                locationLink: reviewLocation + ".html"
+                locationLink: reviewLocation + ".html",
+                reviewUpVote: 0,
+                reviewDownVote: 0
             })
             .then((docRef) => {
                 console.log("Document written with ID: ", docRef.id);
