@@ -57,10 +57,13 @@
         function readReviewsToList() {
             // Clear the review list
             var reviewListDiv = document.getElementById("reviewList");
-            reviewListDiv.innerHTML = "<h1>Recently Added Reviews</h1>";
+            reviewListDiv.innerHTML = "<h2>Recently Added Reviews</h2>";
             // Add each review
             db.collection("reviews").get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
+                    console.log('a doc: ', doc.data());
+                    console.log('a doc: ', doc.id);
+                    // console.log('a doc: ', doc.get());
                     // Loading the review list div from the dom into the JS
                     var reviewListDiv = document.getElementById("reviewList");
                     
@@ -90,6 +93,13 @@
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
 
+                    // Level line
+                    // doc.data().level is the type field for the data in Firebase
+                    let levelText = document.createTextNode("Level : " + doc.data().level);
+                    pgrph.appendChild(levelText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
                     // Type line
                     // doc.data().type is the type field for the data in Firebase
                     let typeText = document.createTextNode("Type : " + doc.data().type);
@@ -111,6 +121,7 @@
                     let commentText = document.createTextNode(doc.data().comment);
                     pgrph.appendChild(commentText);
 
+
                     var deleteButton = document.createElement('button');
                     // var editButton = document.createElement('button');
                     deleteButton.innerHTML = 'x'
@@ -119,6 +130,48 @@
                     reviewListDiv.appendChild(deleteButton);
                     deleteButton.setAttribute('onclick', 'deleteReviews("' + doc.id + '")');
                     // reviewListDiv.appendChild(editButton);
+
+                    //Up/Down Vote Line
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    // doc.data().reviewDownVote is the downvote field for the data in Firebase
+                    // doc.data().reviewUpVote is the Upvote field for the data in Firebase
+                    //upvote counter
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    var upvote = document.createElement('b');
+                    upvote.innerHTML = 'Click --> UpVote: ' + doc.data().reviewUpVote;
+                    upvote.onclick = function ()
+                    {
+                        //print doc id to console to obtain
+                        console.log('hellooo: ' + doc.id)
+                        const thisReview = db.collection('reviews').doc(doc.id);
+                        let newUpVoteCount = doc.data().reviewUpVote + 1
+                        thisReview.update({reviewUpVote: newUpVoteCount}).then(res => {
+                        console.log(res);
+                        readReviewsToList()
+                        })
+                    };
+                    pgrph.appendChild(upvote);
+
+                    //downvote counter
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    var downvote = document.createElement('b');
+                    downvote.innerHTML = 'Click --> DownVote: ' + doc.data().reviewDownVote ;
+                    downvote.onclick = function () {
+                        //print doc id to console to obtain
+                        console.log('hellooo: ' + doc.id)
+                        const thisReview = db.collection('reviews').doc(doc.id);
+                        let newDownVoteCount = doc.data().reviewDownVote + 1
+                        thisReview.update({reviewDownVote: newDownVoteCount}).then(res => {
+                        console.log(res);
+                        readReviewsToList()
+                        })
+                    };
+                    pgrph.appendChild(downvote);
+
 
                     // Add the newly constructed paragraph to the review list div
                     reviewListDiv.appendChild(pgrph);
@@ -137,7 +190,9 @@
                 type: reviewType,
                 rating: reviewRating,
                 comment: reviewComment,
-                locationLink: reviewLocation + ".html"
+                locationLink: reviewLocation + ".html",
+                reviewUpVote: 0,
+                reviewDownVote: 0
             })
             .then((docRef) => {
                 console.log("Document written with ID: ", docRef.id);
@@ -232,8 +287,12 @@
     <div class="topnav">
         <a class="active" href="#home">Home</a>
         <a href="#contact">Find a Bathroom</a>
-        <a href="#about">Rate</a>
+        <a href="./rate.html">Rate</a>
         <input type="text" placeholder="Search..">
+    </div>
+
+    <div>
+        <h1>Rate My Bathroom</h1>
     </div>
 
     <div id="reviewList">
@@ -294,7 +353,6 @@
         <div>
             <button type="button" name="addReviewButton" id="addReviewButton" onclick="addAReview(document.getElementById('location').value, document.getElementById('level').value, document.getElementById('type').value, document.getElementById('rating').value, document.getElementById('comment').value, document.getElementById(location))">Add Review</button>
         </div>
-    </div>
-
 </body>
 </html>
+

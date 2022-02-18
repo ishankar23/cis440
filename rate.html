@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <script type="javascript" src="backend.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Home</title>
+    <!-- DATABASE CONNECTION DON'T TOUCH -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- Database connection: Firebase is basically MongoDB, the following code is copied from Firebase-->
+    <script>
+        console.log("STARTING DB CONNECTION");
+        // Your web app's Firebase configuration
+        firebase.initializeApp({
+            apiKey: "AIzaSyBHPV6k7TkSCmRvu3aPnaExWZZaaBQuY6g",
+            authDomain: "cis440-capstone.firebaseapp.com",
+            projectId: "cis440-capstone",
+            storageBucket: "cis440-capstone.appspot.com",
+            messagingSenderId: "949879801088",
+            appId: "1:949879801088:web:9df9adc21bb46f2f195fe5"
+        });
+        console.log("INITIALIZED FIREBASE");
+      
+        // Initialize Database
+        var db = firebase.firestore();
+
+        // --- Sample Code for Database Usage ---
+
+        // 
+        /* db.collection("reviews").add({
+            location: "Hayden",
+            type: "Gender",
+            rating: 5,
+            comment: "Please Help"
+        })
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        }); */
+
+        // Sample code for reading the Firebase Database
+        /* db.collection("reviews").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${doc.data()}`);
+            });
+        }); */
+
+        // --- End of Sample Code ---
+
+        // Write to database for adding reviews
+        function addAReview(reviewLocation, reviewLevel, reviewType, reviewRating, reviewComment, profileLink) {
+            db.collection("reviews").add({
+                location: reviewLocation,
+                level: reviewLevel,
+                type: reviewType,
+                rating: reviewRating,
+                comment: reviewComment,
+                locationLink: reviewLocation + ".html"
+            })
+            .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+                document.getElementById('location').value = null;
+                document.getElementById('level').value = null;
+                document.getElementById('type').value = null;
+                document.getElementById('rating').value = null;
+                document.getElementById('comment').value = null;
+                readReviewsToList();
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+                let errorMsgDisplay = document.getElementById("errorMsg");
+                let errorMsgText = document.createTextNode("Error Adding Review. See Console for More Details.");
+                errorMsgDisplay.appendChild(errorMsgText);
+            });
+        }
+
+        function previewReview(reviewLocation, reviewType, reviewRating, reviewComment) {
+            console.log("--- Inputted Review ---");
+            console.log("Location: " + reviewLocation);
+            console.log("Level " + reviewLevel);
+            console.log("Type: " + reviewType);
+            console.log("Rating: " + reviewRating);
+            console.log("Comment: " + reviewComment);
+            console.log("--- End of Review ---");
+            document.getElementById('location').value = null;
+            document.getElementById('type').value = null;
+            document.getElementById('rating').value = null;
+            document.getElementById('comment').value = null;
+        }
+      </script>
+    <!-- END OF DATABASE CONNECTION -->
+</head>
+
+<body>
+    <div class="topnav">
+        <a href="./home.html">Home</a>
+        <a href="#contact">Find a Bathroom</a>
+        <a class="active" href="./rate.html">Rate</a>
+        <input type="text" placeholder="Search..">
+    </div>
+
+    <div>
+        <div>
+            <label for="location">Location<span>*</span></label><br>
+            <div>
+                <select name="location" id="location">
+                    <option value="Memorial Union">Memorial Union</option>
+                    <option value="Hayden Library">Hayden Library</option>
+                    <option value="Business Administration C-Wing">Business Administration C-Wing (BAC)</option>
+                    <option value="Business Administration">Business Administration (BA)</option>
+                    <option value="Barrett Honors Hall">Barrett Honors Hall</option>
+                </select>
+            </div>
+        </div><br>
+        <div>
+            <label for="level">Level<span>*</span></label><br>
+            <div>
+                <select name="level" id="level">
+                    <option value="Basement">Basement</option>
+                    <option value="1st Floor">1st Floor</option>
+                    <option value="2nd Floor">2nd Floor</option>
+                    <option value="3rd Floor">3rd Floor</option>
+                    <option value="4th Floor">4th Floor</option>
+                    <option value="5th Floor">5th Floor</option>
+                    <option value="6th Floor">6th Floor</option>
+                </select>
+            </div><br>
+        <div>
+            <label for="type">Bathroom Type<span>*</span></label><br>
+            <div>
+                <select name="type" id="type">
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Gender Neutral">Gender Neutral</option>
+                </select>
+            </div>
+        </div><br>
+        <div>
+            <label for="rating">Rating<span>*</span></label><br>
+            <input type="number" placeholder="0" name="rating"  min="0" max="5" step="1" id="rating" title="How would YOU rate this bathroom?? Change lives by rating accurately!!" required="required">  / 5 ⭐s
+        </div><br>
+        <div>
+            <label for="comment">Comments?</span></label><br>
+            <textarea type="textarea" name="comment" rows="4" id="comment" title="Have something else to say?? Leave your thoughts here :) "></textarea>
+        </div><br>
+        <div>
+            <button type="button" name="addReviewButton" id="addReviewButton" onclick="addAReview(document.getElementById('location').value, document.getElementById('level').value, document.getElementById('type').value, document.getElementById('rating').value, document.getElementById('comment').value, document.getElementById(location))">Add Review</button>
+        </div>
+    </div>
+
+</body>
+</html>
+

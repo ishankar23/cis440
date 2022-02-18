@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <script type="javascript" src="backend.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- Database connection: Firebase is basically MongoDB, the following code is copied from Firebase-->
+    <title>Rate My Bathroom - Hayden Library</title>
+    <script>
+        console.log("STARTING DB CONNECTION");
+        // Your web app's Firebase configuration
+        firebase.initializeApp({
+            apiKey: "AIzaSyBHPV6k7TkSCmRvu3aPnaExWZZaaBQuY6g",
+            authDomain: "cis440-capstone.firebaseapp.com",
+            projectId: "cis440-capstone",
+            storageBucket: "cis440-capstone.appspot.com",
+            messagingSenderId: "949879801088",
+            appId: "1:949879801088:web:9df9adc21bb46f2f195fe5"
+        });
+        console.log("INITIALIZED FIREBASE");
+      
+        // Initialize Database
+        var db = firebase.firestore();
+
+        // --- Sample Code for Database Usage ---
+
+        // 
+        /* db.collection("reviews").add({
+            location: "Hayden",
+            type: "Gender",
+            rating: 5,
+            comment: "Please Help"
+        })
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        }); */
+
+        // Sample code for reading the Firebase Database
+        /* db.collection("reviews").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${doc.data()}`);
+            });
+        }); */
+
+        // --- End of Sample Code ---
+
+        // To get Aira started on bathroom locations
+        // db.collection("reviews").get().then((querySnapshot) => {
+        //     querySnapshot.forEach((doc) => {
+        //         console.log(doc.data());
+        //     });
+        // });
+        
+        function queryReviewsToList() {
+            // Clear the review list
+            var reviewListDiv = document.getElementById("reviewList");
+            reviewListDiv.innerHTML = "<h1>Barrett Honors Hall</h1>";
+            // Add each review
+            db.collection("reviews").where("location", "in", ["Barrett Honors Hall"]).get().then((querySnapshot)=> {
+                querySnapshot.forEach((doc)=> {
+                    var reviewListDiv = document.getElementById("reviewList");
+                    
+                    // Constructing new div element
+                    let pgrph = document.createElement("div");
+                    pgrph.setAttribute("id", "review");
+                    // Location line
+                    // doc.data().location is the location field for the data in Firebase
+                    var locationText = document.createElement("a");
+                    locationText.setAttribute("href", doc.data().locationLink);
+                    locationText.setAttribute("id", "location");
+                    locationText.innerText = doc.data().location;
+                    pgrph.appendChild(locationText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+
+                    // Level line
+                    // doc.data().type is the type field for the data in Firebase
+                    let levelText = document.createTextNode("Level : " + doc.data().level);
+                    pgrph.appendChild(levelText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+
+                    // Type line
+                    // doc.data().type is the type field for the data in Firebase
+                    let typeText = document.createTextNode("Type : " + doc.data().type);
+                    pgrph.appendChild(typeText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+
+                    // Rated line
+                    // doc.data().rated is the rating field for the data in Firebase
+                    let ratedText = document.createTextNode("Rated : " + doc.data().rating + " / 5 ⭐s");
+                    pgrph.appendChild(ratedText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    
+                    // Comment line
+                    // doc.data().comment is the comment field for the data in Firebase
+                    let commentText = document.createTextNode(doc.data().comment);
+                    pgrph.appendChild(commentText);
+
+                    // Add the newly constructed paragraph to the review list div
+                    reviewListDiv.appendChild(pgrph);
+
+                    // console.log(doc.data());
+                });
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
+        }
+        
+        window.onload = queryReviewsToList;
+      </script>
+</head>
+<body>
+    <div class="topnav">
+        <a href="./home.html">Home</a>
+        <a class="active" href="#contact">Find a Bathroom</a>
+        <a href="./rate.html">Rate</a>
+        <input type="text" placeholder="Search..">
+    </div>
+    <div id="reviewList">
+        <h1>Hayden Library</h1>
+        <h1>Recently Added Reviews</h1>
+        <!-- Content in the review list is added in by the js above -->
+    </div>
+</body>
+</html>
