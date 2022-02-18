@@ -53,13 +53,6 @@
 
         // --- End of Sample Code ---
 
-        // To get Aira started on bathroom locations
-        db.collection("bathrooms").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                console.log(doc.data());
-            });
-        });
-
         // Read out of the reviews collection (basically a table in Firebase) to the homepage for the app
         function readReviewsToList() {
             // Clear the review list
@@ -73,17 +66,30 @@
                     
                     // Constructing new div element
                     let pgrph = document.createElement("div");
+                    
                     pgrph.setAttribute("id", "review");
+
                     // Location line
                     // doc.data().location is the location field for the data in Firebase
                     var locationText = document.createElement("a");
                     locationText.setAttribute("href", doc.data().locationLink);
-                    locationText.setAttribute("id", "location");
+                    locationText.setAttribute("id", "locationLink");
                     locationText.innerText = doc.data().location;
                     pgrph.appendChild(locationText);
                     // Adding paragraph break
                     var br = document.createElement('br');
+                    
                     pgrph.appendChild(br);
+   
+
+                    // Level line
+                    // doc.data().level is the type field for the data in Firebase
+                    let levelText = document.createTextNode("Level : " + doc.data().level);
+                    pgrph.appendChild(levelText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+
                     // Type line
                     // doc.data().type is the type field for the data in Firebase
                     let typeText = document.createTextNode("Type : " + doc.data().type);
@@ -91,6 +97,7 @@
                     // Adding paragraph break
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
+
                     // Rated line
                     // doc.data().rated is the rating field for the data in Firebase
                     let ratedText = document.createTextNode("Rated : " + doc.data().rating + " / 5 ⭐s");
@@ -98,10 +105,20 @@
                     // Adding paragraph break
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
+
                     // Comment line
                     // doc.data().comment is the comment field for the data in Firebase
                     let commentText = document.createTextNode(doc.data().comment);
                     pgrph.appendChild(commentText);
+
+                    var deleteButton = document.createElement('button');
+                    // var editButton = document.createElement('button');
+                    deleteButton.innerHTML = 'x'
+                    // editButton.innerHTML = '✎'
+                    
+                    reviewListDiv.appendChild(deleteButton);
+                    deleteButton.setAttribute('onclick', 'deleteReviews("' + doc.id + '")');
+                    // reviewListDiv.appendChild(editButton);
 
                     // Add the newly constructed paragraph to the review list div
                     reviewListDiv.appendChild(pgrph);
@@ -113,16 +130,19 @@
         window.onload = readReviewsToList;
 
         // Write to database for adding reviews
-        function addAReview(reviewLocation, reviewType, reviewRating, reviewComment) {
+        function addAReview(reviewLocation, reviewLevel, reviewType, reviewRating, reviewComment, profileLink) {
             db.collection("reviews").add({
                 location: reviewLocation,
+                level: reviewLevel,
                 type: reviewType,
                 rating: reviewRating,
-                comment: reviewComment
+                comment: reviewComment,
+                locationLink: reviewLocation + ".html"
             })
             .then((docRef) => {
                 console.log("Document written with ID: ", docRef.id);
                 document.getElementById('location').value = null;
+                document.getElementById('level').value = null;
                 document.getElementById('type').value = null;
                 document.getElementById('rating').value = null;
                 document.getElementById('comment').value = null;
@@ -139,6 +159,7 @@
         function previewReview(reviewLocation, reviewType, reviewRating, reviewComment) {
             console.log("--- Inputted Review ---");
             console.log("Location: " + reviewLocation);
+            console.log("Level " + reviewLevel);
             console.log("Type: " + reviewType);
             console.log("Rating: " + reviewRating);
             console.log("Comment: " + reviewComment);
@@ -147,6 +168,61 @@
             document.getElementById('type').value = null;
             document.getElementById('rating').value = null;
             document.getElementById('comment').value = null;
+        }
+
+        document.getElementById('')
+
+        // Sample code for reading the Firebase Database
+        /* db.collection("reviews").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${doc.data()}`);
+            });
+        }); */
+
+       
+        
+        // only let these people delete
+    
+        function deleteReviews(docid, userRole) {
+
+             // db query to filter based on people who are admin
+            var adminList = db.collection("users").where("role", "==", "admin").get().then((querySnapshot) =>  {
+                querySnapshot.forEach((doc) => {
+                console.log(doc.data('role'));
+            });
+            });
+
+            let result = adminList.includes('admin')
+
+            // Figure out what the current user's role is:
+
+            /* db.collection("users").get("role").then((querySnapshot) =>  {
+                querySnapshot.forEach((doc) => {
+                console.log(doc.data('role'));
+            });
+            }); */
+
+
+            // Delete a document ONLY if that user has the role = admin
+
+            // if (userRole == 'admin') {
+            //     db.collection("reviews").doc(docid).delete().then(() => {
+            //             console.log("Document successfully deleted!");
+            //             readReviewsToList();
+            //      }).catch((error) => {
+            //             console.error("Error removing document: ", error);
+            //     });
+                
+            //         console.log('You can delete reviews');   
+                                    
+            //     }
+
+            // else {
+                
+            //         console.log('You cannot delete reviews!');
+                
+            // }
+
         }
       </script>
     <!-- END OF DATABASE CONNECTION -->
@@ -162,15 +238,41 @@
 
     <div id="reviewList">
         <h1>Recently Added Reviews</h1>
+        
         <!-- Content in the review list is added in by the js above -->
+    </div>
+    <div id='delete'>
+
     </div>
     <hr>
     <p id="errorMsg" hidden></p>
     <div>
+        
         <div>
             <label for="location">Location<span>*</span></label><br>
-            <input type="text" placeholder="Hayden 2nd Floor West"  name="location"  id="location" title="Where is the bathroom you're reviewing? Don't forget to include the floor of the building!" required="required">
+            <div>
+                <select name="location" id="location">
+                    <option value="Memorial Union">Memorial Union</option>
+                    <option value="Hayden Library">Hayden Library</option>
+                    <option value="Business Administration C-Wing">Business Administration C-Wing (BAC)</option>
+                    <option value="Business Administration">Business Administration (BA)</option>
+                    <option value="Barrett Honors Hall">Barrett Honors Hall</option>
+                </select>
+            </div>
         </div><br>
+        <div>
+            <label for="level">Level<span>*</span></label><br>
+            <div>
+                <select name="level" id="level">
+                    <option value="Basement">Basement</option>
+                    <option value="1st Floor">1st Floor</option>
+                    <option value="2nd Floor">2nd Floor</option>
+                    <option value="3rd Floor">3rd Floor</option>
+                    <option value="4th Floor">4th Floor</option>
+                    <option value="5th Floor">5th Floor</option>
+                    <option value="6th Floor">6th Floor</option>
+                </select>
+            </div><br>
         <div>
             <label for="type">Bathroom Type<span>*</span></label><br>
             <div>
@@ -190,7 +292,7 @@
             <textarea type="textarea" name="comment" rows="4" id="comment" title="Have something else to say?? Leave your thoughts here :) "></textarea>
         </div><br>
         <div>
-            <button type="button" name="addReviewButton" id="addReviewButton" onclick="addAReview(document.getElementById('location').value, document.getElementById('type').value, document.getElementById('rating').value, document.getElementById('comment').value)">Add Review</button>
+            <button type="button" name="addReviewButton" id="addReviewButton" onclick="addAReview(document.getElementById('location').value, document.getElementById('level').value, document.getElementById('type').value, document.getElementById('rating').value, document.getElementById('comment').value, document.getElementById(location))">Add Review</button>
         </div>
     </div>
 
