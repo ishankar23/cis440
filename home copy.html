@@ -125,6 +125,9 @@
                     // doc.data().comment is the comment field for the data in Firebase
                     let commentText = document.createTextNode(doc.data().comment);
                     pgrph.appendChild(commentText);
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
 
                     if(currentUserPrivAdmin){
                         var deleteButton = document.createElement('button');
@@ -137,10 +140,6 @@
                         // reviewListDiv.appendChild(editButton);
                     }
 
-                    //Up/Down Vote Line
-                    // Adding paragraph break
-                    var br = document.createElement('br');
-                    pgrph.appendChild(br);
                     // doc.data().reviewDownVote is the downvote field for the data in Firebase
                     // doc.data().reviewUpVote is the Upvote field for the data in Firebase
                     //upvote counter
