@@ -153,8 +153,8 @@
                         const thisReview = db.collection('reviews').doc(doc.id);
                         let newUpVoteCount = doc.data().reviewUpVote + 1
                         thisReview.update({reviewUpVote: newUpVoteCount}).then(res => {
-                        console.log(res);
-                        readReviewsToList()
+                            console.log(res);
+                            readReviewsToList()
                         })
                     };
                     pgrph.appendChild(upvote);
@@ -242,38 +242,14 @@
         
         // only let these people delete
     
-        function deleteReviews(docid, userRole) {
-
-             // db query to filter based on people who are admin
-             adminList = db.collection("users").where("role", "==", "admin").get().then((querySnapshot) =>  {
-                querySnapshot.forEach((doc) => {
-                console.log(doc.data('role'));
-            });
-            });
-
-            let result = adminList.includes('admin')
-
-            //const substring = 'admin';
-            // const match = adminList.find(element => {
-            //     if (element.includes(substring)) {
-            //     return true;
-            //     }
-            // });
-
-            // // let result = adminList.includes('admin')
-
-            // if (match !== undefined) {
-            //     db.collection("reviews").doc(docid).delete().then(() => {
-            //         console.log("Document successfully deleted!");
-            //         readReviewsToList();
-            //         }).catch((error) => {
-            //             console.error("Error removing document: ", error);
-            //         });
-            // }
-
-         
-
-        }
+        function deleteReviews(docid) {
+            db.collection("reviews").doc(docid).delete().then(() => {
+                    console.log("Document successfully deleted!");
+                    readReviewsToList();
+                }).catch((error) => {
+                    console.error("Error removing document: ", error);
+            });                 
+            }
       </script>
     <!-- END OF DATABASE CONNECTION -->
 </head>
