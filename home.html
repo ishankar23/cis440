@@ -245,7 +245,7 @@
         function deleteReviews(docid, userRole) {
 
              // db query to filter based on people who are admin
-            var adminList = db.collection("users").where("role", "==", "admin").get().then((querySnapshot) =>  {
+             adminList = db.collection("users").where("role", "==", "admin").get().then((querySnapshot) =>  {
                 querySnapshot.forEach((doc) => {
                 console.log(doc.data('role'));
             });
@@ -253,34 +253,25 @@
 
             let result = adminList.includes('admin')
 
-            // Figure out what the current user's role is:
-
-            /* db.collection("users").get("role").then((querySnapshot) =>  {
-                querySnapshot.forEach((doc) => {
-                console.log(doc.data('role'));
-            });
-            }); */
-
-
-            // Delete a document ONLY if that user has the role = admin
-
-            // if (userRole == 'admin') {
-            //     db.collection("reviews").doc(docid).delete().then(() => {
-            //             console.log("Document successfully deleted!");
-            //             readReviewsToList();
-            //      }).catch((error) => {
-            //             console.error("Error removing document: ", error);
-            //     });
-                
-            //         console.log('You can delete reviews');   
-                                    
+            //const substring = 'admin';
+            // const match = adminList.find(element => {
+            //     if (element.includes(substring)) {
+            //     return true;
             //     }
+            // });
 
-            // else {
-                
-            //         console.log('You cannot delete reviews!');
-                
+            // // let result = adminList.includes('admin')
+
+            // if (match !== undefined) {
+            //     db.collection("reviews").doc(docid).delete().then(() => {
+            //         console.log("Document successfully deleted!");
+            //         readReviewsToList();
+            //         }).catch((error) => {
+            //             console.error("Error removing document: ", error);
+            //         });
             // }
+
+         
 
         }
       </script>
