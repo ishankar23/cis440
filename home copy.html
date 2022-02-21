@@ -53,19 +53,17 @@
 
         // --- End of Sample Code ---
 
-        // Declare user permissions
-        var currentUserPrivAdmin = false;
-            
         // Read out of the reviews collection (basically a table in Firebase) to the homepage for the app
         function readReviewsToList() {
             // Clear the review list
             var reviewListDiv = document.getElementById("reviewList");
             reviewListDiv.innerHTML = "<h2>Recently Added Reviews</h2>";
-
-            // Check for Admin Role
+            // Check for admin role
+            // Pull the UID out of the URL
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const uid = urlParams.get('uid');
+            let currentUserPrivAdmin = false;
             console.log("CHECKING USER PERMS");
             db.collection("users").doc(uid).get().then(function (doc) {
                     console.log(doc.get("role"));
@@ -74,15 +72,18 @@
                         console.log("USER IS: " + currentUserPrivAdmin);
                     }
             });
-            
             // Add each review
             db.collection("reviews").get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
+                    console.log('a doc: ', doc.data());
+                    console.log('a doc: ', doc.id);
+                    // console.log('a doc: ', doc.get());
                     // Loading the review list div from the dom into the JS
                     var reviewListDiv = document.getElementById("reviewList");
                     
                     // Constructing new div element
                     let pgrph = document.createElement("div");
+                    
                     pgrph.setAttribute("id", "review");
 
                     // Location line
@@ -94,6 +95,7 @@
                     pgrph.appendChild(locationText);
                     // Adding paragraph break
                     var br = document.createElement('br');
+                    
                     pgrph.appendChild(br);
 
                     // Level line
@@ -103,7 +105,6 @@
                     // Adding paragraph break
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
-
                     // Type line
                     // doc.data().type is the type field for the data in Firebase
                     let typeText = document.createTextNode("Type : " + doc.data().type);
@@ -124,11 +125,7 @@
                     // doc.data().comment is the comment field for the data in Firebase
                     let commentText = document.createTextNode(doc.data().comment);
                     pgrph.appendChild(commentText);
-                    // Adding paragraph break
-                    var br = document.createElement('br');
-                    pgrph.appendChild(br);
 
-                    console.log("USER IS: " + currentUserPrivAdmin);
                     if(currentUserPrivAdmin){
                         var deleteButton = document.createElement('button');
                         // var editButton = document.createElement('button');
@@ -140,6 +137,12 @@
                         // reviewListDiv.appendChild(editButton);
                     }
 
+                    //Up/Down Vote Line
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    // doc.data().reviewDownVote is the downvote field for the data in Firebase
+                    // doc.data().reviewUpVote is the Upvote field for the data in Firebase
                     //upvote counter
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
@@ -157,6 +160,7 @@
                     };
                     pgrph.appendChild(upvote);
 
+                    //downvote counter
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
                     var downvote = document.createElement('b');
@@ -173,14 +177,14 @@
                     };
                     pgrph.appendChild(downvote);
 
+
                     // Add the newly constructed paragraph to the review list div
                     reviewListDiv.appendChild(pgrph);
 
                     // console.log(doc.data());
                 });
             });
-        }
-
+        };
         window.onload = readReviewsToList;
 
         // Write to database for adding reviews
@@ -235,6 +239,8 @@
             });
         }); */
 
+       
+        
         // only let these people delete
     
         function deleteReviews(docid) {
@@ -244,18 +250,16 @@
                 }).catch((error) => {
                     console.error("Error removing document: ", error);
             });                 
-        }
-
-    </script>
+            }
+      </script>
     <!-- END OF DATABASE CONNECTION -->
 </head>
 
 <body>
     <div class="topnav">
-        <a class="active" href="./home.html">Home</a>
+        <a class="active" href="#home">Home</a>
         <a href="#contact">Find a Bathroom</a>
         <a href="./rate.html">Rate</a>
-        <a href="./index.html">Login</a>
         <input type="text" placeholder="Search..">
     </div>
 
@@ -265,15 +269,16 @@
 
     <div id="reviewList">
         <h1>Recently Added Reviews</h1>
+        
         <!-- Content in the review list is added in by the js above -->
     </div>
-
     <div id='delete'>
 
     </div>
     <hr>
     <p id="errorMsg" hidden></p>
     <div>
+        
         <div>
             <label for="location">Location<span>*</span></label><br>
             <div>
@@ -322,4 +327,3 @@
         </div>
 </body>
 </html>
-
