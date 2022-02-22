@@ -31,7 +31,7 @@
                 })
                 .then((docRef) => {
                     console.log("Document written with ID: ", docRef.id);
-                    window.location.replace("home.html"); 
+                    window.location.replace("./rate.html"); 
                 })
                 .catch((error) => {
                     console.error("Error adding document: ", error);
@@ -65,7 +65,7 @@
                 console.log(doc.id);
                 if (doc.get("username") == user && doc.get("password") == pass && user != null && pass != null) 
                 {
-                    window.location.replace("home.html?uid=" + doc.id);
+                    window.location.replace("rate.html?uid=" + doc.id);
                 }
                  
                 

@@ -53,8 +53,7 @@
 
         // --- End of Sample Code ---
 
-        // Declare user permissions
-        var currentUserPrivAdmin = false;
+        
             
         // Read out of the reviews collection (basically a table in Firebase) to the homepage for the app
         function readReviewsToList() {
@@ -66,6 +65,7 @@
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const uid = urlParams.get('uid');
+            var currentUserPrivAdmin = false;
             console.log("CHECKING USER PERMS");
             db.collection("users").doc(uid).get().then(function (doc) {
                     console.log(doc.get("role"));
@@ -176,7 +176,6 @@
                     // Add the newly constructed paragraph to the review list div
                     reviewListDiv.appendChild(pgrph);
 
-                    // console.log(doc.data());
                 });
             });
         }
@@ -252,7 +251,7 @@
 
 <body>
     <div class="topnav">
-        <a class="active" href="#home">Home</a>
+        <a class="active" href="./home.html">Home</a>
         <a href="./find.html">Find a Bathroom</a>
         <a href="./rate.html">Rate</a>
         <a href="./index.html">Login</a>
