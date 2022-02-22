@@ -53,26 +53,36 @@
 
         // --- End of Sample Code ---
 
-        // To get Aira started on bathroom locations
-        db.collection("bathrooms").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                console.log(doc.data());
-            });
-        });
-
         // Read out of the reviews collection (basically a table in Firebase) to the homepage for the app
         function readReviewsToList() {
             // Clear the review list
             var reviewListDiv = document.getElementById("reviewList");
             reviewListDiv.innerHTML = "<h2>Recently Added Reviews</h2>";
+            // Check for admin role
+            // Pull the UID out of the URL
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const uid = urlParams.get('uid');
+            let currentUserPrivAdmin = false;
+            console.log("CHECKING USER PERMS");
+            db.collection("users").doc(uid).get().then(function (doc) {
+                    console.log(doc.get("role"));
+                    if (doc.get("role") == "admin") {
+                        currentUserPrivAdmin = true;
+                    }
+            });
             // Add each review
             db.collection("reviews").get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
+                    console.log('a doc: ', doc.data());
+                    console.log('a doc: ', doc.id);
+                    // console.log('a doc: ', doc.get());
                     // Loading the review list div from the dom into the JS
                     var reviewListDiv = document.getElementById("reviewList");
                     
                     // Constructing new div element
                     let pgrph = document.createElement("div");
+                    
                     pgrph.setAttribute("id", "review");
 
                     // Location line
@@ -84,6 +94,7 @@
                     pgrph.appendChild(locationText);
                     // Adding paragraph break
                     var br = document.createElement('br');
+                    
                     pgrph.appendChild(br);
 
                     // Level line
@@ -93,7 +104,6 @@
                     // Adding paragraph break
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
-
                     // Type line
                     // doc.data().type is the type field for the data in Firebase
                     let typeText = document.createTextNode("Type : " + doc.data().type);
@@ -115,13 +125,65 @@
                     let commentText = document.createTextNode(doc.data().comment);
                     pgrph.appendChild(commentText);
 
+                    if(currentUserPrivAdmin){
+                        var deleteButton = document.createElement('button');
+                        // var editButton = document.createElement('button');
+                        deleteButton.innerHTML = 'x'
+                        // editButton.innerHTML = '✎'
+                        
+                        reviewListDiv.appendChild(deleteButton);
+                        deleteButton.setAttribute('onclick', 'deleteReviews("' + doc.id + '")');
+                        // reviewListDiv.appendChild(editButton);
+                    }
+
+                    //Up/Down Vote Line
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    // doc.data().reviewDownVote is the downvote field for the data in Firebase
+                    // doc.data().reviewUpVote is the Upvote field for the data in Firebase
+                    //upvote counter
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    var upvote = document.createElement('b');
+                    upvote.innerHTML = 'Click --> UpVote: ' + doc.data().reviewUpVote;
+                    upvote.onclick = function (){
+                        //print doc id to console to obtain
+                        console.log('hellooo: ' + doc.id)
+                        const thisReview = db.collection('reviews').doc(doc.id);
+                        let newUpVoteCount = doc.data().reviewUpVote + 1
+                        thisReview.update({reviewUpVote: newUpVoteCount}).then(res => {
+                            console.log(res);
+                            readReviewsToList()
+                        })
+                    };
+                    pgrph.appendChild(upvote);
+
+                    //downvote counter
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    var downvote = document.createElement('b');
+                    downvote.innerHTML = 'Click --> DownVote: ' + doc.data().reviewDownVote ;
+                    downvote.onclick = function () {
+                        //print doc id to console to obtain
+                        console.log('hellooo: ' + doc.id)
+                        const thisReview = db.collection('reviews').doc(doc.id);
+                        let newDownVoteCount = doc.data().reviewDownVote + 1
+                        thisReview.update({reviewDownVote: newDownVoteCount}).then(res => {
+                            console.log(res);
+                            readReviewsToList()
+                        });
+                    };
+                    pgrph.appendChild(downvote);
+
+
                     // Add the newly constructed paragraph to the review list div
                     reviewListDiv.appendChild(pgrph);
 
                     // console.log(doc.data());
                 });
             });
-        }
+        };
         window.onload = readReviewsToList;
 
         // Write to database for adding reviews
@@ -132,7 +194,9 @@
                 type: reviewType,
                 rating: reviewRating,
                 comment: reviewComment,
-                locationLink: reviewLocation + ".html"
+                locationLink: reviewLocation + ".html",
+                reviewUpVote: 0,
+                reviewDownVote: 0
             })
             .then((docRef) => {
                 console.log("Document written with ID: ", docRef.id);
@@ -164,6 +228,28 @@
             document.getElementById('rating').value = null;
             document.getElementById('comment').value = null;
         }
+
+        document.getElementById('')
+
+        // Sample code for reading the Firebase Database
+        /* db.collection("reviews").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${doc.data()}`);
+            });
+        }); */
+
+       
+        
+        // only let these people delete
+    
+        function deleteReviews(docid) {
+            db.collection("reviews").doc(docid).delete().then(() => {
+                    console.log("Document successfully deleted!");
+                    readReviewsToList();
+                }).catch((error) => {
+                    console.error("Error removing document: ", error);
+            });                 
+            }
       </script>
     <!-- END OF DATABASE CONNECTION -->
 </head>
@@ -184,9 +270,14 @@
         <h2>Recently Added Reviews</h2>
         <!-- Content in the review list is added in by the js above -->
     </div>
+  
+    <div id='delete'>
+
+    </div>
     <hr>
     <p id="errorMsg" hidden></p>
     <div>
+        
         <div>
             <label for="location">Location<span>*</span></label><br>
             <div>
@@ -233,8 +324,6 @@
         <div>
             <button type="button" name="addReviewButton" id="addReviewButton" onclick="addAReview(document.getElementById('location').value, document.getElementById('level').value, document.getElementById('type').value, document.getElementById('rating').value, document.getElementById('comment').value, document.getElementById(location))">Add Review</button>
         </div>
-    </div>
-
 </body>
 </html>
 
