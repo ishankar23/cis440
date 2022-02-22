@@ -44,3 +44,12 @@
     margin: 6px 6px;
     padding: 5px 5px;
 }
+
+#locationProf {
+  border: 3px;
+  border-style: solid;
+  border-color: maroon;
+  margin: 6px 6px;
+  padding: 5px 5px;
+}
+

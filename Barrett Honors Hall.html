@@ -70,10 +70,12 @@
                     // Constructing new div element
                     let pgrph = document.createElement("div");
                     pgrph.setAttribute("id", "review");
+
                     // Location line
                     // doc.data().location is the location field for the data in Firebase
                     var locationText = document.createElement("a");
                     locationText.setAttribute("href", doc.data().locationLink);
+                    
                     locationText.setAttribute("id", "location");
                     locationText.innerText = doc.data().location;
                     pgrph.appendChild(locationText);
