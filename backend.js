@@ -31,7 +31,8 @@
                 })
                 .then((docRef) => {
                     console.log("Document written with ID: ", docRef.id);
-                    window.location.replace("./rate.html"); 
+                    // add + here
+                    window.location.replace("home.html" + docRef.id); 
                 })
                 .catch((error) => {
                     console.error("Error adding document: ", error);
@@ -65,18 +66,13 @@
                 console.log(doc.id);
                 if (doc.get("username") == user && doc.get("password") == pass && user != null && pass != null) 
                 {
-                    window.location.replace("rate.html?uid=" + doc.id);
+                    window.location.replace("home.html?uid=" + doc.id);
                 }
                  
                 
             
             }}
             
-            // changing to error page too quickly! need to figure out how to make it wait
-            /* else {
-                window.location.href = "loginError.html";
-            } */
-        
 
         });
         if (not_null == true) {
@@ -96,8 +92,6 @@
     
     }
 
-function addABathroom() {
-    // after clicking add 
-    document.getElementById("add_message").innerHTML =
-    '<div>Add Message<br>Title: <input type="text"><br>Text: <input type="text" id="message"><br><br></div>';
-    }
+function saveUsername() {
+    window.location.replace("home.html" + docRef.id); 
+}
