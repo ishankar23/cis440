@@ -45,7 +45,7 @@
     padding: 5px 5px;
 }
 
-#locationProf {
+.locationProf {
   border: 3px;
   border-style: solid;
   border-color: maroon;

@@ -8,6 +8,7 @@
     <script type="javascript" src="backend.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="../style.css">
     <!-- Database connection: Firebase is basically MongoDB, the following code is copied from Firebase-->
     <title>Rate My Bathroom - Hayden Library</title>
     <script>
@@ -69,7 +70,7 @@
                     
                     // Constructing new div element
                     let pgrph = document.createElement("div");
-                    pgrph.setAttribute("id", "review");
+                    pgrph.setAttribute("class", "review");
 
                     // Location line
                     // doc.data().location is the location field for the data in Firebase
@@ -161,17 +162,60 @@
                 console.log("Error getting documents: ", error);
             });
         }
+
+        function loadTopNav() {
+            // Dynamically load top nav
+
+            // -- Original HTML Code for Top Nav
+            // <a class="active" href="./home.html">Home</a>
+            // <a href="./find.html">Find a Bathroom</a>
+            // <a href="./rate.html">Rate</a>
+
+            // -- Get UID from URL Params
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const uid = urlParams.get('uid');
+            
+            // -- Find Top Nav Div
+            var topNavDiv = document.getElementById("topnav");
+
+            // -- Load Links
+            // -- -- Home Link (Active)
+            let homeLink = document.createElement('a');
+            let homeLinkText = document.createTextNode('Home');
+            homeLink.appendChild(homeLinkText);
+            homeLink.href =  '../home.html?uid=' + uid;
+            topNavDiv.appendChild(homeLink);
+            // -- -- Find Link
+            let findLink = document.createElement('a');
+            let findLinkText = document.createTextNode('Find a Bathroom');
+            findLink.appendChild(findLinkText);
+            findLink.setAttribute('class', 'active');
+            findLink.href = '../find.html?uid=' + uid;
+            topNavDiv.appendChild(findLink);
+            // -- -- Rate Link
+            let rateLink = document.createElement('a');
+            let rateLinkText = document.createTextNode('Rate');
+            rateLink.appendChild(rateLinkText);
+            rateLink.href = '../rate.html?uid=' + uid;
+            topNavDiv.appendChild(rateLink);
+            // -- -- Logout Link
+            let logout = document.createElement('a');
+            let logoutText = document.createTextNode('Logout');
+            logout.appendChild(logoutText);
+            logout.href = '../index.html'
+            topNavDiv.appendChild(logout);
+            // End Dynamically Load Top Nav
+        }
         
-        window.onload = queryReviewsToList;
+        window.onload = () => {
+            queryReviewsToList();
+            loadTopNav();
+        }
       </script>
 </head>
 <body>
-    <div class="topnav">
-        <a href="./home.html">Home</a>
-        <a class="active" href="./find.html">Find a Bathroom</a>
-        <a href="./rate.html">Rate</a>
-        <a href="./index.html">Login</a>
-        <input type="text" placeholder="Search..">
+    <div id="topnav">
     </div>
     
     <div id="reviewList">

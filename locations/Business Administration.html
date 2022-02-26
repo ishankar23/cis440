@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="../style.css">
     <script type="javascript" src="backend.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -61,15 +61,16 @@
         function queryReviewsToList() {
             // Clear the review list
             var reviewListDiv = document.getElementById("reviewList");
-            reviewListDiv.innerHTML = "<h1>Hayden Library</h1>";
+            reviewListDiv.innerHTML = "<h1>Business Administration</h1>";
             // Add each review
-            db.collection("reviews").where("location", "in", ["Hayden Library", "Hayden", "hayden", "hayden Library"]).get().then((querySnapshot)=> {
+            db.collection("reviews").where("location", "in", ["Business Administration"]).get().then((querySnapshot)=> {
                 querySnapshot.forEach((doc)=> {
                     var reviewListDiv = document.getElementById("reviewList");
                     
                     // Constructing new div element
                     let pgrph = document.createElement("div");
                     pgrph.setAttribute("id", "review");
+
                     // Location line
                     // doc.data().location is the location field for the data in Firebase
                     var locationText = document.createElement("a");
@@ -104,7 +105,7 @@
                     // Adding paragraph break
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
-                    
+
                     // Comment line
                     // doc.data().comment is the comment field for the data in Firebase
                     let commentText = document.createTextNode(doc.data().comment);
@@ -121,19 +122,64 @@
             });
         }
         
-        window.onload = queryReviewsToList;
+        function loadTopNav() {
+            // Dynamically load top nav
+
+            // -- Original HTML Code for Top Nav
+            // <a class="active" href="./home.html">Home</a>
+            // <a href="./find.html">Find a Bathroom</a>
+            // <a href="./rate.html">Rate</a>
+
+            // -- Get UID from URL Params
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const uid = urlParams.get('uid');
+            
+            // -- Find Top Nav Div
+            var topNavDiv = document.getElementById("topnav");
+
+            // -- Load Links
+            // -- -- Home Link (Active)
+            let homeLink = document.createElement('a');
+            let homeLinkText = document.createTextNode('Home');
+            homeLink.appendChild(homeLinkText);
+            homeLink.href =  '../home.html?uid=' + uid;
+            topNavDiv.appendChild(homeLink);
+            // -- -- Find Link
+            let findLink = document.createElement('a');
+            let findLinkText = document.createTextNode('Find a Bathroom');
+            findLink.appendChild(findLinkText);
+            findLink.setAttribute('class', 'active');
+            findLink.href = '../find.html?uid=' + uid;
+            topNavDiv.appendChild(findLink);
+            // -- -- Rate Link
+            let rateLink = document.createElement('a');
+            let rateLinkText = document.createTextNode('Rate');
+            rateLink.appendChild(rateLinkText);
+            rateLink.href = '../rate.html?uid=' + uid;
+            topNavDiv.appendChild(rateLink);
+            // -- -- Logout Link
+            let logout = document.createElement('a');
+            let logoutText = document.createTextNode('Logout');
+            logout.appendChild(logoutText);
+            logout.href = '../index.html'
+            topNavDiv.appendChild(logout);
+            // End Dynamically Load Top Nav
+        }
+        
+        window.onload = () => {
+            queryReviewsToList();
+            loadTopNav();
+        }
       </script>
 </head>
 <body>
-    <div class="topnav">
-        <a href="./home.html">Home</a>
-        <a class="active" href="./find.html">Find a Bathroom</a>
-        <a href="./rate.html">Rate</a>
-        <input type="text" placeholder="Search..">
+    <div id="topnav">
     </div>
+
     <div id="reviewList">
-        <h1>Hayden Library</h1>
-        <h2>Recently Added Reviews</h2>
+        <h1>Business Administration</h1>
+        <h1>Recently Added Reviews</h1>
         <!-- Content in the review list is added in by the js above -->
     </div>
 </body>
