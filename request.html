@@ -28,15 +28,6 @@
         // Initialize Database
         var db = firebase.firestore();
 
-        function redirectRequest() {
-            // -- Get UID from URL Params
-            const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
-            const uid = urlParams.get('uid');
-
-            window.location.replace("./request.html?uid=" + uid);
-        }
-
         function loadTopNav() {
             // Dynamically load top nav
 
@@ -120,25 +111,27 @@
         // --- End of Sample Code ---
 
         // Write to database for adding reviews
-        function addAReview(reviewLocation, reviewLevel, reviewType, reviewRating, reviewComment, profileLink) {
-            db.collection("reviews").add({
+        function submitNewLocation(reviewLocation, reviewLevel, reviewType, reviewRating, reviewComment, profileLink) {
+            // -- Get UID from URL Params
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const uid = urlParams.get('uid');
+            db.collection("pending reviews").add({
                 location: reviewLocation,
                 level: reviewLevel,
                 type: reviewType,
                 rating: reviewRating,
                 comment: reviewComment,
-                locationLink: "./locations/" + reviewLocation + ".html",
-                reviewUpVote: 0,
-                reviewDownVote: 0
             })
             .then((docRef) => {
                 console.log("Document written with ID: ", docRef.id);
-                document.getElementById('location').value = null;
+                document.getElementById('newLocation').value = null;
                 document.getElementById('level').value = null;
                 document.getElementById('type').value = null;
-                document.getElementById('rating').value = null;
+                document.getElementById('rating').value = null; 
                 document.getElementById('comment').value = null;
-                readReviewsToList();
+                window.location.replace('./submitSuccess.html?uid=' + uid);
+
             })
             .catch((error) => {
                 console.error("Error adding document: ", error);
@@ -156,7 +149,7 @@
             console.log("Rating: " + reviewRating);
             console.log("Comment: " + reviewComment);
             console.log("--- End of Review ---");
-            document.getElementById('location').value = null;
+            document.getElementById('newLocation').value = null;
             document.getElementById('type').value = null;
             document.getElementById('rating').value = null;
             document.getElementById('comment').value = null;
@@ -175,16 +168,9 @@
 
     <div id="ratePage">
         <div>
-            <label for="location">Location<span>*</span></label><br>
+            <label for="newLocation">Location<span>*</span></label><br>
             <div>
-                <select name="location" id="location">
-                    <option value="Memorial Union">Memorial Union</option>
-                    <option value="Hayden Library">Hayden Library</option>
-                    <option value="Business Administration C-Wing">Business Administration C-Wing (BAC)</option>
-                    <option value="Business Administration">Business Administration (BA)</option>
-                    <option value="Barrett Honors Hall">Barrett Honors Hall</option>
-                </select>
-        
+                <input type="text" id="newLocation" name="newLocation" placeholder="Location" required>
             </div>
         </div><br>
         <div>
@@ -219,13 +205,9 @@
             <textarea type="textarea" name="comment" rows="4" id="comment" title="Have something else to say?? Leave your thoughts here :) "></textarea>
         </div><br>
         <div>
-            <button type="button" name="addReviewButton" id="addReviewButton" onclick="addAReview(document.getElementById('location').value, document.getElementById('level').value, document.getElementById('type').value, document.getElementById('rating').value, document.getElementById('comment').value, document.getElementById(location))">Add Review</button>
-        </div>
-        <div>
-            <button type="button" name="addNewLocationwButton" id="addNewLocationButton" onclick="redirectRequest()">Request New Location</button></a>
+            <button type="button" name="submitNewLocationButton" id="submitNewLocationButton" onclick="submitNewLocation(document.getElementById('newLocation').value, document.getElementById('level').value, document.getElementById('type').value, document.getElementById('rating').value, document.getElementById('comment').value, document.getElementById(location))">Add Review</button>
         </div>
     </div>
 
 </body>
 </html>
-
