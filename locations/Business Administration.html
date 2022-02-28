@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="../style.css">
     <script type="javascript" src="backend.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -69,12 +70,12 @@
                     
                     // Constructing new div element
                     let pgrph = document.createElement("div");
-                    pgrph.setAttribute("id", "review");
+                    pgrph.setAttribute("class", "review");
 
                     // Location line
                     // doc.data().location is the location field for the data in Firebase
                     var locationText = document.createElement("a");
-                    locationText.setAttribute("href", doc.data().locationLink);
+                    locationText.setAttribute("href", "../"+doc.data().locationLink);
                     locationText.setAttribute("id", "location");
                     locationText.innerText = doc.data().location;
                     pgrph.appendChild(locationText);

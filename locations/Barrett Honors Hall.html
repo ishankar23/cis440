@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="../style.css">
     <script type="javascript" src="backend.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <link rel="stylesheet" href="../style.css">
     <!-- Database connection: Firebase is basically MongoDB, the following code is copied from Firebase-->
     <title>Rate My Bathroom - Hayden Library</title>
     <script>
@@ -75,9 +74,8 @@
                     // Location line
                     // doc.data().location is the location field for the data in Firebase
                     var locationText = document.createElement("a");
-                    locationText.setAttribute("href", doc.data().locationLink);
-                    
-                    locationText.setAttribute("id", "location");
+                    locationText.setAttribute("href", "../"+doc.data().locationLink);
+                    locationText.setAttribute("id", "locationLink");
                     locationText.innerText = doc.data().location;
                     pgrph.appendChild(locationText);
                     // Adding paragraph break
@@ -219,7 +217,7 @@
     </div>
     
     <div id="reviewList">
-        <h1>Hayden Library</h1>
+        <h1>Barrett Honors Hall</h1>
         <h1>Recently Added Reviews</h1>
         <!-- Content in the review list is added in by the js above -->
     </div>
