@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-    <script type="javascript" src="backend.js"></script>
+    <link rel="stylesheet" href="../style.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <!-- Database connection: Firebase is basically MongoDB, the following code is copied from Firebase-->
-    <title>Rate My Bathroom - Hayden Library</title>
+    <title>Rate My Bathroom - Business Administration C-Wing</title>
     <script>
         console.log("STARTING DB CONNECTION");
         // Your web app's Firebase configuration
@@ -22,52 +21,6 @@
             appId: "1:949879801088:web:9df9adc21bb46f2f195fe5"
         });
         console.log("INITIALIZED FIREBASE");
-
-        function loadTopNav() {
-            console.log("Loading Top Nav...")
-            // Dynamically load top nav
-
-            // -- Original HTML Code for Top Nav
-            // <a class="active" href="./home.html">Home</a>
-            // <a href="./find.html">Find a Bathroom</a>
-            // <a href="./rate.html">Rate</a>
-
-            // -- Get UID from URL Params
-            const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
-            const uid = urlParams.get('uid');
-            
-            // -- Find Top Nav Div
-            var topNavDiv = document.getElementById("topnav");
-
-            // -- Load Links
-            // -- -- Home Link (Active)
-            let homeLink = document.createElement('a');
-            let homeLinkText = document.createTextNode('Home');
-            homeLink.appendChild(homeLinkText);
-            homeLink.href =  './home.html?uid=' + uid;
-            topNavDiv.appendChild(homeLink);
-            // -- -- Find Link
-            let findLink = document.createElement('a');
-            let findLinkText = document.createTextNode('Find a Bathroom');
-            findLink.appendChild(findLinkText);
-            findLink.setAttribute('class', 'active');
-            findLink.href = './find.html?uid=' + uid;
-            topNavDiv.appendChild(findLink);
-            // -- -- Rate Link
-            let rateLink = document.createElement('a');
-            let rateLinkText = document.createTextNode('Rate');
-            rateLink.appendChild(rateLinkText);
-            rateLink.href = './rate.html?uid=' + uid;
-            topNavDiv.appendChild(rateLink);
-            // -- -- Logout Link
-            let logout = document.createElement('a');
-            let logoutText = document.createTextNode('Logout');
-            logout.appendChild(logoutText);
-            logout.href = './index.html'
-            topNavDiv.appendChild(logout);
-            // End Dynamically Load Top Nav
-        }
       
         // Initialize Database
         var db = firebase.firestore();
@@ -107,20 +60,19 @@
         function queryReviewsToList() {
             // Clear the review list
             var reviewListDiv = document.getElementById("reviewList");
-            reviewListDiv.innerHTML = "<h1>Business Administration</h1>";
+            reviewListDiv.innerHTML = "<h1>Business Administration C-Wing</h1>";
             // Add each review
-            db.collection("reviews").where("location", "in", ["Business Administration"]).get().then((querySnapshot)=> {
+            db.collection("reviews").where("location", "in", ["BAC", "Business Administration C-Wing"]).get().then((querySnapshot)=> {
                 querySnapshot.forEach((doc)=> {
                     var reviewListDiv = document.getElementById("reviewList");
                     
                     // Constructing new div element
                     let pgrph = document.createElement("div");
                     pgrph.setAttribute("class", "review");
-
                     // Location line
                     // doc.data().location is the location field for the data in Firebase
                     var locationText = document.createElement("a");
-                    locationText.setAttribute("href", doc.data().locationLink);
+                    locationText.setAttribute("href", "../"+doc.data().locationLink);
                     locationText.setAttribute("id", "location");
                     locationText.innerText = doc.data().location;
                     pgrph.appendChild(locationText);
@@ -151,11 +103,51 @@
                     // Adding paragraph break
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
-
+                    
                     // Comment line
                     // doc.data().comment is the comment field for the data in Firebase
                     let commentText = document.createTextNode(doc.data().comment);
                     pgrph.appendChild(commentText);
+
+                    // Adding paragraph break
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+
+                    // doc.data().reviewDownVote is the downvote field for the data in Firebase
+                    // doc.data().reviewUpVote is the Upvote field for the data in Firebase
+                    //upvote counter
+                    var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    var upvote = document.createElement('b');
+                    upvote.innerHTML = 'Click --> UpVote: ' + doc.data().reviewUpVote;
+                    upvote.onclick = function (){
+                        //print doc id to console to obtain
+                        console.log('hellooo: ' + doc.id)
+                        const thisReview = db.collection('reviews').doc(doc.id);
+                        let newUpVoteCount = doc.data().reviewUpVote + 1
+                        thisReview.update({reviewUpVote: newUpVoteCount}).then(res => {
+                            console.log(res);
+                            readReviewsToList()
+                        })
+                    };
+                    pgrph.appendChild(upvote);
+
+                     //downvote counter
+                     var br = document.createElement('br');
+                    pgrph.appendChild(br);
+                    var downvote = document.createElement('b');
+                    downvote.innerHTML = 'Click --> DownVote: ' + doc.data().reviewDownVote ;
+                    downvote.onclick = function () {
+                        //print doc id to console to obtain
+                        console.log('hellooo: ' + doc.id)
+                        const thisReview = db.collection('reviews').doc(doc.id);
+                        let newDownVoteCount = doc.data().reviewDownVote + 1
+                        thisReview.update({reviewDownVote: newDownVoteCount}).then(res => {
+                            console.log(res);
+                            readReviewsToList()
+                        });
+                    };
+                    pgrph.appendChild(downvote);
 
                     // Add the newly constructed paragraph to the review list div
                     reviewListDiv.appendChild(pgrph);
@@ -167,6 +159,51 @@
                 console.log("Error getting documents: ", error);
             });
         }
+
+        function loadTopNav() {
+            // Dynamically load top nav
+
+            // -- Original HTML Code for Top Nav
+            // <a class="active" href="./home.html">Home</a>
+            // <a href="./find.html">Find a Bathroom</a>
+            // <a href="./rate.html">Rate</a>
+
+            // -- Get UID from URL Params
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const uid = urlParams.get('uid');
+            
+            // -- Find Top Nav Div
+            var topNavDiv = document.getElementById("topnav");
+
+            // -- Load Links
+            // -- -- Home Link (Active)
+            let homeLink = document.createElement('a');
+            let homeLinkText = document.createTextNode('Home');
+            homeLink.appendChild(homeLinkText);
+            homeLink.href =  '../home.html?uid=' + uid;
+            topNavDiv.appendChild(homeLink);
+            // -- -- Find Link
+            let findLink = document.createElement('a');
+            let findLinkText = document.createTextNode('Find a Bathroom');
+            findLink.appendChild(findLinkText);
+            findLink.setAttribute('class', 'active');
+            findLink.href = '../find.html?uid=' + uid;
+            topNavDiv.appendChild(findLink);
+            // -- -- Rate Link
+            let rateLink = document.createElement('a');
+            let rateLinkText = document.createTextNode('Rate');
+            rateLink.appendChild(rateLinkText);
+            rateLink.href = '../rate.html?uid=' + uid;
+            topNavDiv.appendChild(rateLink);
+            // -- -- Logout Link
+            let logout = document.createElement('a');
+            let logoutText = document.createTextNode('Logout');
+            logout.appendChild(logoutText);
+            logout.href = '../index.html'
+            topNavDiv.appendChild(logout);
+            // End Dynamically Load Top Nav
+        }
         
         window.onload = () => {
             queryReviewsToList();
@@ -176,10 +213,9 @@
 </head>
 <body>
     <div id="topnav">
-        <!-- Top Nav Dynamically Loaded in JS -->
     </div>
     <div id="reviewList">
-        <h1>Business Administration</h1>
+        <h1>Business Administration C-Wing</h1>
         <h1>Recently Added Reviews</h1>
         <!-- Content in the review list is added in by the js above -->
     </div>

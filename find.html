@@ -73,8 +73,113 @@
             // End Dynamically Load Top Nav
         }
 
+        function loadLocations() {
+            // Dynamically Load the Sample Locations
+
+            // Original HTML Code for locations
+            // <div class="locationProf">
+            //     <a href="./Barrett Honors Hall.html"><h2>Barrett Honors Hall</h2></a>
+            // </div>
+            // <div class="locationProf">
+            //     <a href="./Business Administration.html"><h2>Business Administration</h2></a>
+            // </div>
+            // <div class="locationProf">
+            //     <a href="./Business Administration C-Wing.html"><h2>Business Administration C-Wing</h2></a>
+            // </div>
+            // <div class="locationProf">
+            //     <a href="./Hayden Library.html"><h2>Hayden Library</h2></a>
+            // </div>
+            // <div class="locationProf">
+            //     <a href="./Memorial Union.html"><h2>Memorial Union</h2></a>
+            // </div>
+
+            // -- Get UID from URL Params
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const uid = urlParams.get('uid');
+
+            // Find the locations div tag in the DOM
+            // -- This is where we are putting the different locations links
+            let locationsDiv = document.getElementById("locations");
+
+            // Add in the location links and append them to the locations div tag
+            // -- Barrett Honors Hall
+            // -- -- Create DOM Elements
+            let barrettTextNode = document.createTextNode("Barrett Honors Hall");
+            let barrettH2Tag = document.createElement('h2');
+            let barrettAnchorTag = document.createElement('a');
+            barrettAnchorTag.href = "./locations/Barrett Honors Hall.html?uid=" + uid;
+            let barrettDiv = document.createElement('div');
+            barrettDiv.setAttribute('class', 'locationProf');
+            // -- -- Link DOM Elements Together
+            barrettH2Tag.appendChild(barrettTextNode);
+            barrettAnchorTag.appendChild(barrettH2Tag);
+            barrettDiv.appendChild(barrettAnchorTag);
+            locationsDiv.appendChild(barrettDiv);
+
+            // -- Business Administration
+            // -- -- Create DOM Elements
+            let busAdmTextNode = document.createTextNode("Business Administration");
+            let busAdmH2Tag = document.createElement('h2');
+            let busAdmAnchorTag = document.createElement('a');
+            busAdmAnchorTag.href = "./locations/Business Administration.html?uid=" + uid;
+            let busAdmDiv = document.createElement('div');
+            busAdmDiv.setAttribute('class', 'locationProf');
+            // -- -- Link DOM Elements Together
+            busAdmH2Tag.appendChild(busAdmTextNode);
+            busAdmAnchorTag.appendChild(busAdmH2Tag);
+            busAdmDiv.appendChild(busAdmAnchorTag);
+            locationsDiv.appendChild(busAdmDiv);
+
+            // -- Business Administration C-Wing
+            // -- -- Create DOM Elements
+            let busAdmCWingTextNode = document.createTextNode("Business Administration C-Wing");
+            let busAdmCWingH2Tag = document.createElement('h2');
+            let busAdmCWingAnchorTag = document.createElement('a');
+            busAdmCWingAnchorTag.href = "./locations/Business Administration C-Wing.html?uid=" + uid;
+            let busAdmCWingDiv = document.createElement('div');
+            busAdmCWingDiv.setAttribute('class', 'locationProf');
+            // -- -- Link DOM Elements Together
+            busAdmCWingH2Tag.appendChild(busAdmCWingTextNode);
+            busAdmCWingAnchorTag.appendChild(busAdmCWingH2Tag);
+            busAdmCWingDiv.appendChild(busAdmCWingAnchorTag);
+            locationsDiv.appendChild(busAdmCWingDiv);
+
+            // -- Hayden Library
+            // -- -- Create DOM Elements
+            let haydenTextNode = document.createTextNode("Hayden Library");
+            let haydenH2Tag = document.createElement('h2');
+            let haydenAnchorTag = document.createElement('a');
+            haydenAnchorTag.href = "./locations/Hayden Library.html?uid=" + uid;
+            let haydenDiv = document.createElement('div');
+            haydenDiv.setAttribute('class', 'locationProf');
+            // -- -- Link DOM Elements Together
+            haydenH2Tag.appendChild(haydenTextNode);
+            haydenAnchorTag.appendChild(haydenH2Tag);
+            haydenDiv.appendChild(haydenAnchorTag);
+            locationsDiv.appendChild(haydenDiv);
+
+            // -- Memorial Union
+            // -- -- Create DOM Elements
+            let memorialUnionTextNode = document.createTextNode("Memorial Union");
+            let memorialUnionH2Tag = document.createElement('h2');
+            let memorialUnionAnchorTag = document.createElement('a');
+            memorialUnionAnchorTag.href = "./locations/Memorial Union.html?uid=" + uid;
+            let memorialUnionDiv = document.createElement('div');
+            memorialUnionDiv.setAttribute('class', 'locationProf');
+            // -- -- Link DOM Elements Together
+            memorialUnionH2Tag.appendChild(memorialUnionTextNode);
+            memorialUnionAnchorTag.appendChild(memorialUnionH2Tag);
+            memorialUnionDiv.appendChild(memorialUnionAnchorTag);
+            locationsDiv.appendChild(memorialUnionDiv);
+
+
+
+        }
+
         window.onload = () => {
             loadTopNav();
+            loadLocations();
         }
 
         // --- Sample Code for Database Usage ---
@@ -122,26 +227,15 @@
 
 <body>
     <div id="topnav">
+        <!-- Dynamically Loaded in JS -->
     </div>
 
     <div>
         <h1>Rate My Bathroom</h1>
     </div>
 
-    <div id="locationProf">
-        <a href="./Barrett Honors Hall.html"><h2>Barrett Honors Hall</h2></a>
-    </div>
-    <div id="locationProf">
-        <a href="./Business Administration.html"><h2>Business Administration</h2></a>
-    </div>
-    <div id="locationProf">
-        <a href="./Business Administration C-Wing.html"><h2>Business Administration C-Wing</h2></a>
-    </div>
-    <div id="locationProf">
-        <a href="./Hayden Library.html"><h2>Hayden Library</h2></a>
-    </div>
-    <div id="locationProf">
-        <a href="./Memorial Union.html"><h2>Memorial Union</h2></a>
+    <div id="locations">
+        <!-- Dynamically Loaded in JS -->
     </div>
     
         

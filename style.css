@@ -1,3 +1,10 @@
+body {
+  background-color: #f5f5f5;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333333;
+}
 /* Add a black background color to the top navigation bar */
   #topnav {
     overflow: hidden;
@@ -45,11 +52,47 @@
     padding: 5px 5px;
 }
 
-  #locationProf {
-    border: 3px;
-    border-style: solid;
-    border-color: maroon;
-    margin: 6px 6px;
-    padding: 5px 5px;
-  }
+.locationProf {
+  border: 3px;
+  border-style: solid;
+  border-color: maroon;
+  margin: 6px 6px;
+  padding: 5px 5px;
+}
 
+#addReviewButton {
+  background-color: maroon;
+  color: gold;
+  padding: 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+
+#addNewLocationButton, #submitNewLocationButton {
+  background-color: maroon;
+  color: gold;
+  padding: 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#ratePage {
+  padding-top: 25px;
+  padding-left: 10px;
+}
+
+#reviewReceived {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 14px;
+  line-height: 2em;
+}
