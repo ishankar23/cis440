@@ -119,7 +119,7 @@
                     var br = document.createElement('br');
                     pgrph.appendChild(br);
                     var upvote = document.createElement('b');
-                    upvote.innerHTML = 'Click --> UpVote: ' + doc.data().reviewUpVote;
+                    upvote.innerHTML = '&#128077;' + doc.data().reviewUpVote;
                     upvote.onclick = function (){
                         //print doc id to console to obtain
                         console.log('hellooo: ' + doc.id)
@@ -133,10 +133,10 @@
                     pgrph.appendChild(upvote);
 
                      //downvote counter
-                     var br = document.createElement('br');
-                    pgrph.appendChild(br);
+                    //var br = document.createElement('br');
+                    //pgrph.appendChild(br);
                     var downvote = document.createElement('b');
-                    downvote.innerHTML = 'Click --> DownVote: ' + doc.data().reviewDownVote ;
+                    downvote.innerHTML = ' &#128078;' + doc.data().reviewDownVote ;
                     downvote.onclick = function () {
                         //print doc id to console to obtain
                         console.log('hellooo: ' + doc.id)
